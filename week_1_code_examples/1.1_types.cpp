@@ -23,7 +23,7 @@ int main () {
 
 	vector<int> nums = {1, 3, 5, 7};
 
-	cout << nums.size();
+	cout << nums.size() << '\n';
 
 	map<string, int> name_to_value;
 	name_to_value["one"] = 1;
