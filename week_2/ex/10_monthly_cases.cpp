@@ -23,12 +23,12 @@ int		main () {
 		} else if (command == "DUMP") {
 			cin >> i;
 			cout << this_month[i - 1].size() << ' ';
-			for (string s : this_month[i - 1]) {
+			for (const string& s : this_month[i - 1]) {
 				cout << s << ' ';
 			}
 			cout << endl;
 		} else if (command == "NEXT") {
-			int previous = days;
+			const int previous = days;
 			days++;
 			if (days == 12)
 				days = 0;
