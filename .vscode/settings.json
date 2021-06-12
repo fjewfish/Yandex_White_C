@@ -12,7 +12,14 @@
     "algorithm": "cpp",
     "__split_buffer": "cpp",
     "memory": "cpp",
-    "utility": "cpp"
+    "utility": "cpp",
+    "fstream": "cpp",
+    "__locale": "cpp",
+    "bitset": "cpp",
+    "ios": "cpp",
+    "istream": "cpp",
+    "locale": "cpp",
+    "streambuf": "cpp"
   },
   "C_Cpp_Runner.cCompilerPath": "/usr/bin/gcc",
   "C_Cpp_Runner.cppCompilerPath": "/usr/bin/g++",
