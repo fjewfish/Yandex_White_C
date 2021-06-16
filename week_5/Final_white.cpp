@@ -16,6 +16,16 @@ using namespace std;
 ** - печать всех событий за все даты:           Print
 */
 
+//Prototype for TESTS
+stringstream	Tests();
+
+void			Error_write(const string& message, const string& str) {
+	stringstream ss;
+
+	ss << message << str;
+	throw runtime_error(ss.str());
+}
+
 struct			Day
 {
 	int value;
@@ -41,14 +51,10 @@ struct			Year
 };
 
 void			CheckMonthDay_valid(const int& month, const int& day) {
-	stringstream ss;
-	if (month < 1 || month > 12){
-		ss << "Month value is invalid: " << month;
-		throw runtime_error(ss.str());
-	} else if (day < 1 || day > 31){
-		ss << "Day value is invalid: " << day;
-		throw runtime_error(ss.str());
-	}
+	if (month < 1 || month > 12)
+		Error_write("Month value is invalid: ", to_string(month));
+	else if (day < 1 || day > 31)
+		Error_write("Day value is invalid: ", to_string(day));
 }
 
 class			Date {
@@ -78,31 +84,13 @@ private:
 };
 
 bool			operator<(const Date& lhs, const Date& rhs){
-    if (lhs.GetYear() != rhs.GetYear()){
-        return lhs.GetYear() < rhs.GetYear();
-    }
-    else if (lhs.GetMonth() != rhs.GetMonth()){
-        return lhs.GetMonth() < rhs.GetMonth();
-    }
-    else {
-        return lhs.GetDay() < rhs.GetDay();
-    }
-}
-
-//bool			operator<(const Date& lhs, const Date& rhs){
-//	if (lhs.GetYear() < rhs.GetYear()) {
-//		return true;
-//	} else if (lhs.GetYear() == rhs.GetYear() && lhs.GetMonth() < rhs.GetMonth()) {
-//		return true;
-//	} else if (lhs.GetMonth() == rhs.GetMonth() && lhs.GetYear() == rhs.GetYear() && lhs.GetDay() < rhs.GetDay()) {
-//		return true;
-//	}
-//	return false;
-//}
-
-bool			operator==(const Date& lhs, const Date& rhs){
-	if (lhs.GetYear() == rhs.GetYear() && lhs.GetMonth() == rhs.GetMonth() && lhs.GetDay() == rhs.GetDay())
+	if (lhs.GetYear() < rhs.GetYear()) {
 		return true;
+	} else if (lhs.GetYear() == rhs.GetYear() && lhs.GetMonth() < rhs.GetMonth()) {
+		return true;
+	} else if (lhs.GetMonth() == rhs.GetMonth() && lhs.GetYear() == rhs.GetYear() && lhs.GetDay() < rhs.GetDay()) {
+		return true;
+	}
 	return false;
 }
 
@@ -114,151 +102,53 @@ ostream&		operator<<(ostream& stream, const Date& date) {
 	return stream;
 }
 
-//class			Database {
-//public:
-//	void AddEvent(const Date& date, const string& event) {
-//		if (event.size()) {
-//			set<string> ex;
-//			if (db.count(date))
-//				ex = db[date];
-//			ex.insert(event);
-//			db[date] = ex;
-//		}
-//	}
-//	bool DeleteEvent(const Date& date, const string& event) {
-//		if (db[date].erase(event)) {
-//			cout << "Deleted successfully" << endl;
-//			return true;
-//		} else {
-//			cout << "Event not found" << endl;
-//			return false;
-//		}
-//	}
-//	int  DeleteDate(const Date& date) {
-//		int N = db[date].size();
-//		db[date].clear();
-//		db.erase(date);
-//		cout << "Deleted " << N << " events" << endl;
-//		return N;
-//	}
-
-//	void Find(const Date& date) const {
-//		if (db.count(date)) {
-//			for (const auto& i : db.at(date)){
-//				cout << i << endl;
-//			}
-//		}
-//	}
-
-//	void Print() const {
-//		for(const auto& date : db) {
-//			for(const auto& event : date.second) {
-//				cout << date.first << " " << event << endl;
-//			}
-//		}
-//	}
-//private:
-//	map<Date, set<string>> db;
-//};
-
-
-class Database
-        {
+class			Database {
 public:
-    void AddEvent(const Date& date, const std::string& event)
-    {
-        if (!event.empty())
-        {
-            records[date].insert(event);
-        }
-    }
-//	bool DeleteEvent(const Date& date, const string& event) {
-//		if (db[date].erase(event)) {
-//			cout << "Deleted successfully" << endl;
-//			return true;
-//		} else {
-//			cout << "Event not found" << endl;
-//			return false;
-//		}
-//	}
-    bool DeleteEvent(const Date& date, const std::string& event)
-    {
-        if (records.count(date) > 0 && records[date].count(event) > 0)
-        {
-            records[date].erase(event);
-			cout << "Deleted successfully" << endl;
-            return true;
-        }
-		cout << "Event not found" << endl;
-        return false;
-    }
-//	int  DeleteDate(const Date& date) {
-//		int N = db[date].size();
-//		db[date].clear();
-//		db.erase(date);
-//		cout << "Deleted " << N << " events" << endl;
-//		return N;
-//	}
-    int  DeleteDate(const Date& date)
-    {
-        int to_del = 0;
-        if (records.count(date) > 0)
-        {
-            to_del = records.at(date).size();
-            records.erase(date);
-        }
-		cout << "Deleted " << to_del << " events" << endl;
-        return to_del;
-    }
-//	void Find(const Date& date) const {
-//		if (db.count(date)) {
-//			for (const auto& i : db.at(date)){
-//				cout << i << endl;
-//			}
-//		}
-//	}
-    void Find(const Date& date) const
-    {
-        std::set<std::string> result;
-        if (records.count(date) > 0)
-        {
-            for (const auto& i : records.at(date))
-				cout << i << endl;
-        }
-    }
 
-//	void Print() const {
-//		for(const auto& date : db) {
-//			for(const auto& event : date.second) {
-//				cout << date.first << " " << event << endl;
-//			}
-//		}
-//	}
-//private:
-//	map<Date, set<string>> db;
-//};
-    void Print() const
-    {
-        for (const auto& r : records)
-        {
-            for (auto s : r.second)
-            {
-                std::cout << r.first << ' ' << s << std::endl;
-            }
-        }
-    }
-
-private:
-    std::map<Date, std::set<std::string>> records;
-};
-
-
-void			PrintVector_str(const vector<string>& v) {
-	for (const auto& i : v) {
-		cout << i << "_";
+	void		AddEvent(const Date& date, const string& event) {
+		if (!event.empty())
+			db[date].insert(event);
 	}
-	cout << endl;
-}
+
+	bool		DeleteEvent(const Date& date, const string& event) {
+		if (db[date].erase(event)) {
+			cout << "Deleted successfully" << endl;
+			return true;
+		} else {
+			cout << "Event not found" << endl;
+			return false;
+		}
+	}
+
+	int			DeleteDate(const Date& date) {
+		int N = 0;
+		if (db.count(date) > 0)
+		{
+			N = db.at(date).size();
+			db.erase(date);
+		}
+		cout << "Deleted " << N << " events" << endl;
+		return N;
+	}
+
+	void		Find(const Date& date) const {
+		if (db.count(date)) {
+			for (const auto& i : db.at(date)){
+				cout << i << endl;
+			}
+		}
+	}
+
+	void		Print() const {
+		for(const auto& date : db) {
+			for(const auto& event : date.second) {
+				cout << date.first << " " << event << endl;
+			}
+		}
+	}
+private:
+	map<Date, set<string>> db;
+};
 
 vector<string>	StrToWords(const string& str) {
 	vector<string> words;
@@ -277,26 +167,16 @@ vector<string>	StrToWords(const string& str) {
 	if (word.length()) {
 		words.push_back(word);
 	}
-//PrintVector_str(words);
 	return words;
 }
 
-int			EnsureNextSymbolAndSkip (stringstream& stream, const string& str, const int& situation) {
-	if (situation == 1 && stream.peek() != '-') {
-		stringstream ss;
-		ss << "Wrong date format: " << str;
-		throw runtime_error(ss.str());
-		return 0;
+void			EnsureNextSymbolAndSkip (stringstream& stream, const string& str, const int& situation) {
+	if (situation == 1 && stream.peek() != '-')
+		Error_write("Wrong date format: ", str);
+	else if (situation == 2 && ((stream.peek() < '0' || stream.peek() > '9') &&
+							stream.peek() != '-' && stream.peek() != '+')) {
+		Error_write("Wrong date format: ", str);
 	}
-	if (situation == 2 && ((stream.peek() >= '0' && stream.peek() <= '9') ||
-							stream.peek() == '-' || stream.peek() == '+'))
-		return 1;
-	if (situation == 2) {
-		stringstream ss;
-		ss << "Wrong date format: " << str;
-		throw runtime_error(ss.str());
-	}
-	return 0;
 }
 
 Date			ReadDate(const string& str){
@@ -315,72 +195,59 @@ Date			ReadDate(const string& str){
 	EnsureNextSymbolAndSkip(stream, str, 2);
 	stream >> d >> end;
 	if (end.size()) {
-		stringstream ss;
-		ss << "Wrong date format: " << str;
-		throw runtime_error(ss.str());
+		Error_write("Wrong date format: ", str);
 	}
 	return Date{Year(y), Month(m), Day(d)};
 }
 
-stringstream	Tests();
-
 int				main() {
 	Database db;
 	string str;
-	//stringstream test = Tests();
-try {
-	//while (getline(test, str)) {
-	while (getline(cin, str)) {
-		vector<string> commands = StrToWords(str);
-		if (commands.size()) {
-			if (commands[0] == "Print" && commands.size() == 1) {
-				db.Print();
-			} else if(commands[0] != "Add" && commands[0] != "Del" && commands[0] != "Find") {
-				//cout << "Unknown command: " << commands[0] << endl;
-				//break;
-				stringstream ss;
-				ss << "Unknown command: " << commands[0];
-				throw runtime_error(ss.str());
-			} else {
-				Date date = ReadDate(commands[1]);
-				if (commands[0] == "Add" && commands.size() == 3) {
-					db.AddEvent(date, commands[2]);
-				} else if (commands[0] == "Del") {
-					if(commands.size() == 2)
-						db.DeleteDate(date);
-					else if (commands.size() == 3)
-						db.DeleteEvent(date, commands[2]);
-				} else if (commands[0] == "Find" && commands.size() == 2) {
-					db.Find(date);
+	//stringstream test = Tests(); //ONLY FOR TEST STREAM
+	try {
+		//while (getline(test, str)) { //ONLY FOR TEST STREAM
+		while (getline(cin, str)) {
+			vector<string> commands = StrToWords(str);
+			if (commands.size()) {
+				if (commands.size() == 1 && commands[0] == "Print") {
+					db.Print();
+				} else if(commands[0] != "Add" && commands[0] != "Del" && commands[0] != "Find")
+					Error_write("Unknown command: ", commands[0]);
+				else {
+					Date date = ReadDate(commands[1]);
+					if (commands[0] == "Add" && commands.size() == 3) {
+						db.AddEvent(date, commands[2]);
+					} else if (commands[0] == "Del") {
+						if(commands.size() == 2)
+							db.DeleteDate(date);
+						else if (commands.size() == 3)
+							db.DeleteEvent(date, commands[2]);
+					} else if (commands[0] == "Find" && commands.size() == 2) {
+						db.Find(date);
+					}
 				}
-				//else {
-				//	cout << "Unknown command: " << commands[0];
-				//	break;
-				//}
 			}
 		}
-	}
-
-} catch (const exception& ex) {
+	} catch (const exception& ex) {
 	cout << ex.what() << endl;
-}
+	}
 	return 0;
 }
 
-
+//TESTING STREAM
 stringstream	Tests() {
 	stringstream stream;
-	//stream << "" << endl;
-	//cout << "\nBASE TESTS:\n";
-	//stream << "Add 0-1-2 event1" << endl;
-	//stream << "Add 1-2-3 event2" << endl;
-	//stream << "Find 0-1-2" << endl;
-	//stream << "" << endl;
-	//stream << "Del 0-1-2" << endl;
-	//stream << "Print" << endl;
-	//stream << "Del 1-2-3 event2" << endl;
-	//stream << "Del 1-2-3 event2" << endl;
-	//stream << "Add 0-13-32 event1" << endl;
+	stream << "" << endl;
+	cout << "\nBASE TESTS:\n";
+	stream << "Add 0-1-2 event1" << endl;
+	stream << "Add 1-2-3 event2" << endl;
+	stream << "Find 0-1-2" << endl;
+	stream << "" << endl;
+	stream << "Del 0-1-2" << endl;
+	stream << "Print" << endl;
+	stream << "Del 1-2-3 event2" << endl;
+	stream << "Del 1-2-3 event2" << endl;
+	stream << "Add 0-13-32 event1" << endl;
 
 	//cout << "\nDATE:\n";
 	//stream << "Add 1-1-19 fan" << endl;
@@ -429,7 +296,7 @@ stringstream	Tests() {
 	//stream << "Add 1997-09-2 wd" << endl;
 	//stream << "Print" << endl;
 	//stream << "Find 1997-09-1" << endl;
-	//stream << "Add 1-1- event" << endl;
+	stream << "Add 1-1- event" << endl;
 	stream << "Add 1-2-1 event" << endl;
 	stream << "Print" << endl;
 
