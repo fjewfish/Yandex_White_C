@@ -23,7 +23,7 @@ void			Error_write(const string& message, const string& str) {
 	stringstream ss;
 
 	ss << message << str;
-	throw runtime_error(ss.str());
+	throw logic_error(ss.str());
 }
 
 struct			Day

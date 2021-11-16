@@ -63,5 +63,6 @@ int			main() {
 	PrintVector(dur_v, "NOT sorted");
 	sort(begin(dur_v), end(dur_v));
 	PrintVector(dur_v, "Sorted!!!!");
+	cout << dur1 + dur2;
 	return 0;
 }
